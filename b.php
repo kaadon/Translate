@@ -6,10 +6,12 @@ use Google\Cloud\Translate\V3\TranslationServiceClient;
 $translationClient = new TranslationServiceClient();
 $content = ['one', 'two', 'three'];
 $targetLanguage = 'es';
-$response = $translationClient->translateText(
+var_dump(TranslationServiceClient::locationName("translation-330800", 'global'));
+return;
+$response = $translationClient->translateT88ext(
     $content,
     $targetLanguage,
-    TranslationServiceClient::locationName('translation-330800', 'global')
+    TranslationServiceClient::locationName('translation-330800-58870712e853', 'global')
 );
 
 foreach ($response->getTranslations() as $key => $translation) {
