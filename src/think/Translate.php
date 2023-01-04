@@ -20,7 +20,7 @@ class Translate extends TranslateV2
         if(is_null(self::$instance)){
             $config = [];
             if (Config::has("kaadon.translate.v1")) {
-                $config = Config::has("kaadon.translate.v1");
+                $config = Config::get("kaadon.translate.v1");
             }
             if (!isset($config['key'])) throw new Exception("Key does not exist");
             self::$instance= new static($config['key']);
