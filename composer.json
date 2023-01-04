@@ -1,0 +1,30 @@
+{
+    "name": "kaadon/translate",
+    "type": "library",
+    "description": "Kaadon translate for PHP",
+    "keywords": ["translate"],
+    "homepage": "http://developer.kaadon.com/",
+    "license": "MIT",
+    "require": {
+        "PHP": ">=7.2",
+        "google/cloud-translate": "^1.12"
+    },
+    "authors": [
+        {
+            "name": "Kaadon",
+            "email": "kaadon.com@gmail.com",
+            "homepage": "https://kaadon.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Kaadon\\Translate\\": "src"
+        }
+    },
+    "autoload-dev": {
+
+    },
+    "extra": {
+
+    }
+}
