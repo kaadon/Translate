@@ -80,7 +80,7 @@ class TranslateV2
      */
     public function getLanguage(string $text): string
     {
-        $result = $this->translate->detectLanguage('news');
+        $result = $this->translate->detectLanguage($text);
         return $result['languageCode'];
     }
 
