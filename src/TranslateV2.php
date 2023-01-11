@@ -15,14 +15,21 @@ class TranslateV2
      */
     public $translate = null;
 
+
+
+    public $cachePath = null;
+
     /**
      * @param string|null $key
      */
-    public function __construct(string $key = null)
+    public function __construct(string $key = null,?string $cachePath = null)
     {
         $this->translate = new TranslateClient([
             'key' => $key
         ]);
+        if (!is_null($cachePath)){
+            $this->cachePath = $cachePath;
+        }
     }
 
     /**
@@ -51,15 +58,15 @@ class TranslateV2
      * @param string $lang
      * @return string
      */
-    public function translateText(string $text, string $lang, ?string $cachePath = null): string
+    public function translateText(string $text, string $lang): string
     {
         if (empty($text)) {
             return '';
         }
         $toText = null;
-        if (isset($cachePath) && !empty($cachePath)) {
+        if (isset($this->cachePath) && !empty($this->cachePath)) {
             $md5Text = md5($text);
-            $filePath = "{$cachePath}langCache/{$lang}/{$md5Text}";
+            $filePath = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
             if (is_file($filePath)) {
                 $toText = file_get_contents($filePath);
             }
@@ -69,8 +76,8 @@ class TranslateV2
                 'target' => $lang
             ]);
             $toText = $result['text'];
-            if (isset($cachePath) && !empty($cachePath)) {
-                $file = "{$cachePath}langCache/{$lang}/{$md5Text}";
+            if (isset($this->cachePath) && !empty($this->cachePath)) {
+                $file = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
                 $path = dirname($file);
                 if (!is_dir($path)) {
                     mkdir($path, 0777, true);

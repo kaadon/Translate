@@ -3,9 +3,11 @@
 require 'vendor/autoload.php';
 
 use Google\Cloud\Translate\V2\TranslateClient;
-
-$translate = new \Kaadon\Translate\TranslateV2("");
-$a = $translate->translateText("你好","en");
+//
+//$translate = new \Kaadon\Translate\TranslateV2("");
+//$a = $translate->translateText("你好","en");
+$a = $config['cachePath']??null;
+var_dump($a);
 //// Translate text from english to french.
 //$result = $translate->translate('Hello world!', [
 //    'target' => 'fr'
