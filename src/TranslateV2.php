@@ -51,15 +51,38 @@ class TranslateV2
      * @param string $lang
      * @return string
      */
-    public function translateText(string $text, string $lang): string
+    public function translateText(string $text, string $lang, ?string $cachePath = null): string
     {
-        if (empty($text)){
+        if (empty($text)) {
             return '';
         }
-        $result = $this->translate->translate($text, [
-            'target' => $lang
-        ]);
-        return $result['text'];
+        $toText = null;
+        if (isset($cachePath) && !empty($cachePath)) {
+            $md5Text = md5($text);
+            $filePath = "{$cachePath}langCache/{$lang}/{$md5Text}";
+            if (is_file($filePath)) {
+                $toText = file_get_contents($filePath);
+            }
+        }
+        if (empty($toText)) {
+            $result = $this->translate->translate($text, [
+                'target' => $lang
+            ]);
+            $toText = $result['text'];
+            if (isset($cachePath) && !empty($cachePath)) {
+                $file = "{$cachePath}langCache/{$lang}/{$md5Text}";
+                $path = dirname($file);
+                if (!is_dir($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $fopen = fopen($file, "w") or die('cannot open file');
+                if (!empty($toText)) {
+                    fwrite($fopen, $toText);
+                }
+                fclose($fopen);
+            }
+        }
+        return $toText;
     }
 
     /**
@@ -70,14 +93,14 @@ class TranslateV2
      */
     public function translateJson(string $text, string $lang): array
     {
-        $translateArray = json_decode($text,true);
+        $translateArray = json_decode($text, true);
         if (!is_array($translateArray) || empty($text)) throw new Exception("Please provide JSON format data ");
         $result = [];
         foreach ($translateArray as $key => $translate) {
-            if (is_array($translate)){
-                $result[$key] = $this->translateJson(json_encode($translate),$lang);
-            }else{
-                $result[$key] = $this->translateText($translate,$lang);
+            if (is_array($translate)) {
+                $result[$key] = $this->translateJson(json_encode($translate), $lang);
+            } else {
+                $result[$key] = $this->translateText($translate, $lang);
             }
         }
         return $result;
@@ -105,7 +128,7 @@ class TranslateV2
     /**
      * @return array
      */
-    public function localizedLanguages(string $lang = "en"):array
+    public function localizedLanguages(string $lang = "en"): array
     {
         $languages = $this->translate->localizedLanguages([
             'target' => $lang
