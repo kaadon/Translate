@@ -75,7 +75,7 @@ class TranslateV2
             $result = $this->translate->translate($text, [
                 'target' => $lang
             ]);
-            $toText = $result['text'];
+            $toText = html_entity_decode($result['text'],ENT_QUOTES);
             if (isset($this->cachePath) && !empty($this->cachePath)) {
                 $file = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
                 $path = dirname($file);
@@ -89,7 +89,7 @@ class TranslateV2
                 fclose($fopen);
             }
         }
-        return html_entity_decode($toText);
+        return $toText;
     }
 
     /**
