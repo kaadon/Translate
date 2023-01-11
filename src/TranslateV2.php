@@ -26,6 +26,7 @@ class TranslateV2
     }
 
     /**
+     *
      * @return TranslateClient|null
      */
     public function getTranslate(): ?TranslateClient
@@ -34,6 +35,7 @@ class TranslateV2
     }
 
     /**
+     * 设置翻译对象
      * @param null $translate
      * @return Translate
      */
@@ -44,6 +46,7 @@ class TranslateV2
     }
 
     /**
+     * 翻译文字
      * @param string $text
      * @param string $lang
      * @return string
@@ -59,6 +62,12 @@ class TranslateV2
         return $result['text'];
     }
 
+    /**
+     * 翻译短信文件
+     * @param string $text
+     * @param string $lang
+     * @return array
+     */
     public function translateJson(string $text, string $lang): array
     {
         $translateArray = json_decode($text,true);
