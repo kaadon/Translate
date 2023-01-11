@@ -58,7 +58,7 @@ class TranslateV2
      * @param string $lang
      * @return string
      */
-    public function translateText(string $text, string $lang): string
+    public function translateText(string $text, string $lang,): string
     {
         if (empty($text)) {
             return '';
@@ -89,7 +89,7 @@ class TranslateV2
                 fclose($fopen);
             }
         }
-        return $toText;
+        return html_entity_decode($toText);
     }
 
     /**

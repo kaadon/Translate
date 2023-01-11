@@ -3,11 +3,9 @@
 require 'vendor/autoload.php';
 
 use Google\Cloud\Translate\V2\TranslateClient;
-//
-//$translate = new \Kaadon\Translate\TranslateV2("");
-//$a = $translate->translateText("你好","en");
-$a = $config['cachePath']??null;
-var_dump($a);
+
+$translate = new \Kaadon\Translate\TranslateV2("","/Volumes/SourceData/composer/translate/");
+$a = $translate->translateText("<a>Submit timeout or please submit <img src='444' alt=''> after device time</a>","fr");
 //// Translate text from english to french.
 //$result = $translate->translate('Hello world!', [
 //    'target' => 'fr'
