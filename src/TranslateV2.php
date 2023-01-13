@@ -76,13 +76,12 @@ class TranslateV2
         }
         if (empty($toText)) {
             /** 过滤 **/
-            if ($this->isfilter == 1) $text = (new StringFilter($toText))->getFilter();
+            if ($this->isfilter == 1){
+                $text = (new StringFilter($text))->getFilter();
+            }
             $result = $this->translate->translate($text, [
                 'target' => $lang
             ]);
-            $toText = $result['text'];
-            /** 过滤 **/
-            if ($this->isfilter == 1) $toText = (new StringFilter($toText))->getFilter(2);
             $toText = html_entity_decode($result['text'],ENT_QUOTES);
             if (isset($this->cachePath) && !empty($this->cachePath)) {
                 $file = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
@@ -97,6 +96,7 @@ class TranslateV2
                 fclose($fopen);
             }
         }
+        if ($this->isfilter == 1) $toText = (new StringFilter($toText))->getFilter(2);
         return $toText;
     }
 

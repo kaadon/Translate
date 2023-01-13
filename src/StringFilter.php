@@ -41,11 +41,12 @@ class StringFilter
         foreach ($matches[0] as $match) {
             if (empty($match)) continue;
             preg_match_all(
-                "/[a-zA-Z][1,2]/",
+                "/[a-zA-Z]{1,2}/",
                 $match,
                 $matches_1,
                 PREG_PATTERN_ORDER
             );
+            var_dump($matches_1);
             $filter = $matches_1[0][0]??'';
             if (empty($filter)) continue;
             $this->str = str_replace($match,"<zy{$filter}></zy{$filter}>",$this->str);
