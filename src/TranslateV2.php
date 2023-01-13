@@ -16,19 +16,22 @@ class TranslateV2
     public $translate = null;
 
 
-
     public $cachePath = null;
+    public $isfilter  = 2;
 
     /**
      * @param string|null $key
      */
-    public function __construct(string $key = null,?string $cachePath = null)
+    public function __construct(string $key = null, ?string $cachePath = null, ?int $isfilter = null)
     {
         $this->translate = new TranslateClient([
             'key' => $key
         ]);
-        if (!is_null($cachePath)){
+        if (!is_null($cachePath)) {
             $this->cachePath = $cachePath;
+        }
+        if (!is_null($isfilter)) {
+            $this->isfilter = $isfilter;
         }
     }
 
@@ -58,24 +61,28 @@ class TranslateV2
      * @param string $lang
      * @return string
      */
-    public function translateText(string $text, string $lang,): string
+    public function translateText(string $text, string $lang): string
     {
         if (empty($text)) {
             return '';
         }
         $toText = null;
         if (isset($this->cachePath) && !empty($this->cachePath)) {
-            $md5Text = md5($text);
+            $md5Text  = md5($text);
             $filePath = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
             if (is_file($filePath)) {
                 $toText = file_get_contents($filePath);
             }
         }
         if (empty($toText)) {
+            /** 过滤 **/
+            if ($this->isfilter == 1) $text = (new StringFilter($toText))->getFilter();
             $result = $this->translate->translate($text, [
                 'target' => $lang
             ]);
             $toText = $result['text'];
+            /** 过滤 **/
+            if ($this->isfilter == 1) $toText = (new StringFilter($toText))->getFilter(2);
             if (isset($this->cachePath) && !empty($this->cachePath)) {
                 $file = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
                 $path = dirname($file);
