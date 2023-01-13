@@ -16,8 +16,14 @@ class TranslateV2
     public $translate = null;
 
 
+    /**
+     * @var string|null
+     */
     public $cachePath = null;
-    public $isfilter  = 2;
+    /**
+     * @var int
+     */
+    public $isfilter = 1;
 
     /**
      * @param string|null $key
@@ -76,13 +82,13 @@ class TranslateV2
         }
         if (empty($toText)) {
             /** 过滤 **/
-            if ($this->isfilter == 1){
+            if ($this->isfilter == 1) {
                 $text = (new StringFilter($text))->getFilter();
             }
             $result = $this->translate->translate($text, [
                 'target' => $lang
             ]);
-            $toText = html_entity_decode($result['text'],ENT_QUOTES);
+            $toText = html_entity_decode($result['text'], ENT_QUOTES);
             if (isset($this->cachePath) && !empty($this->cachePath)) {
                 $file = "{$this->cachePath}langCache/{$lang}/{$md5Text}";
                 $path = dirname($file);
