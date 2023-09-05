@@ -2,12 +2,10 @@
 
 namespace Kaadon\Translate;
 
-class StringFilter
+class StringFilterTwo
 {
-    private $character = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    private $filter_1 = '/\%[a-zA-Z]{1,10}/';
-    private $filter_2 = '/\<one_[a-zA-Z]{1,10}\>\<\/one_[a-zA-Z]{1,10}\>/';
+    private $filter_1 = '/\{[a-zA-Z0-9]{1,20}\}/';
+    private $filter_2 = '/\<two_[a-zA-Z0-9]{1,20}\>\<\/two_[a-zA-Z0-9]{1,20}\>/';
     private $str      = null;
 
     public function __construct(string $str)
@@ -41,17 +39,15 @@ class StringFilter
         foreach ($matches[0] as $match) {
             if (empty($match)) continue;
             preg_match_all(
-                "/[a-zA-Z]{1,10}/",
+                "/[a-zA-Z0-9]{1,20}/",
                 $match,
                 $matches_1,
                 PREG_PATTERN_ORDER
             );
             $filter = $matches_1[0][0]??'';
             if (empty($filter)) continue;
-            $this->str = str_replace($match,"<one_{$filter}></one_{$filter}>",$this->str);
+            $this->str = str_replace($match,"<two_{$filter}></two_{$filter}>",$this->str);
         }
-        $this->str = (new StringFilterTwo($this->str))->getFilter();
-        $this->str = preg_replace("/\s(?=\s)/","\\1",$this->str);
     }
 
     private function toVariable():void
@@ -62,17 +58,14 @@ class StringFilter
             $matches,
             PREG_PATTERN_ORDER
         );
-        $text = "";
         if (empty($matches) || empty($matches[0]) || empty($matches[0][0])) return;
         foreach ($matches[0] as $match) {
             if (empty($match)) continue;
             $filter_one = explode("></",$match);
-            $filter_two = str_replace("<one_","",$filter_one[0]);
+            $filter_two = str_replace("<two_","",$filter_one[0]);
             if (empty($filter_two)) continue;
-            $this->str = str_replace($match," %".$filter_two,$this->str);
+            $this->str = str_replace($match," {".$filter_two."} ",$this->str);
         }
-        $this->str = (new StringFilterTwo($this->str))->getFilter(2);
-        $this->str = preg_replace("/\s(?=\s)/","\\1",$this->str);
     }
 
 

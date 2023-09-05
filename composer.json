@@ -6,7 +6,7 @@
     "homepage": "http://developer.kaadon.com/",
     "license": "MIT",
     "require": {
-        "PHP": ">=7.2",
+        "PHP": ">=7.4",
         "google/cloud-translate": "^1.12",
         "topthink/framework": ">=6.1"
     },
