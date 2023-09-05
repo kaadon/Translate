@@ -62,16 +62,18 @@ class StringFilter
             $matches,
             PREG_PATTERN_ORDER
         );
-        $text = "";
-        if (empty($matches) || empty($matches[0]) || empty($matches[0][0])) return;
-        foreach ($matches[0] as $match) {
-            if (empty($match)) continue;
-            $filter_one = explode("></",$match);
-            $filter_two = str_replace("<one_","",$filter_one[0]);
-            if (empty($filter_two)) continue;
-            $this->str = str_replace($match," %".$filter_two,$this->str);
+        if (empty($matches) || empty($matches[0]) || empty($matches[0][0])){
+            $this->str = (new StringFilterTwo($this->str))->getFilter(2);
+        }else{
+            foreach ($matches[0] as $match) {
+                if (empty($match)) continue;
+                $filter_one = explode("></",$match);
+                $filter_two = str_replace("<one_","",$filter_one[0]);
+                if (empty($filter_two)) continue;
+                $this->str = str_replace($match," %".$filter_two,$this->str);
+            }
+            $this->str = (new StringFilterTwo($this->str))->getFilter(2);
         }
-        $this->str = (new StringFilterTwo($this->str))->getFilter(2);
         $this->str = preg_replace("/\s(?=\s)/","\\1",$this->str);
     }
 
